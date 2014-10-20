@@ -1,2 +1,18 @@
 <:Body>
-  <p>-- component --</p>
+  <ul class="pagination">
+    <li class="{{ if first_page }}disabled{{ end }}">
+      <a e-click="previous_page">&laquo;</a>
+    </li>
+    {{ page_numbers.each do |page_number| }}
+      {{ if page_number.nil? }}
+        <li><a>...</a></li>
+      {{ else }}
+        <li class="{{ if current_page == page_number }}active{{ end }}">
+          <a e-click="set_page(page_number)">{{ page_number }}</a>
+        </li>
+      {{ end }}
+    {{ end }}
+    <li class="{{ if last_page }}disabled{{ end }}">
+      <a e-click="next_page">&raquo;</a>
+    </li>
+  </ul>

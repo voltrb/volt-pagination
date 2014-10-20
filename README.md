@@ -1,8 +1,8 @@
 # Volt::Pagination
 
-TODO: Write a gem description
+Provides a pagination component to easily show the paging.
 
-## Installation
+## Usage
 
 Add this line to your application's Gemfile:
 
@@ -12,18 +12,29 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+Then include it as a component in your main component's ```dependencies.rb```
 
-    $ gem install volt-pagination
+    component "pagination"
 
-## Usage
+To page a collection or query, simply use ```.skip``` and ```.limit```
+Assuming a page size of 10:
 
-TODO: Write usage instructions here
+    def items_on_page
+      store._items.find({active: true}).skip((params._page.or(1).to_i - 1) * 10).limit(10)
+    end
 
-## Contributing
+Then in your view you can add:
 
-1. Fork it ( http://github.com/[my-github-username]/volt-pagination/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+```html
+<:pagination total="{{ store._items.size }}" per_page="10" page="{{ params._page }}" />
+```
+
+```per_page``` defaults to 10 and ```page``` defaults to params._page
+
+The pagination tag supports the following options:
+
+- total (required): the total number of items.
+- per_page (default: 10): how many items per page.
+- page (default: ```params._page```): the number of the current page (starting with 1)
+- window (default: 5): the number of pages to show around the current page
+- outer_window: (default: 0): the number of pages to show at the start and end of the pager.
