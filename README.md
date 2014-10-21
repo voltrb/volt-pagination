@@ -37,4 +37,4 @@ The pagination tag supports the following options:
 - per_page (default: 10): how many items per page.
 - page (default: ```params._page```): the number of the current page (starting with 1)
 - window (default: 5): the number of pages to show around the current page
-- outer_window: (default: 0): the number of pages to show at the start and end of the pager.
+- outer_window: (default: 1): the number of pages to show at the start and end of the pager.

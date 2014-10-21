@@ -51,11 +51,11 @@ module Pagination
     end
 
     def window
-      attrs.window.or(5)
+      attrs.window.or(5).to_i
     end
 
     def outer_window
-      attrs.outer_window.or(0)
+      attrs.outer_window.or(1).to_i
     end
 
     def per_page
