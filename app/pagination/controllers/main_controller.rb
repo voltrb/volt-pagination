@@ -59,11 +59,11 @@ module Pagination
     end
 
     def per_page
-      attrs.per_page.or(10)
+      attrs.per_page.or(10).to_i
     end
 
     def current_page
-      (attrs.page || params._page.or(1)).to_i
+      (attrs.page || params._page).or(1).to_i
     end
 
     def total_pages
