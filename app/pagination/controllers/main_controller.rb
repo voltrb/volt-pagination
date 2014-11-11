@@ -79,26 +79,43 @@ module Pagination
     end
 
     def next_page
-      new_page = current_page + 1
-      if new_page <= total_pages
-        set_page(new_page)
-      end
+      return 2 unless current_page
+      return nil if last_page
+      current_page + 1
     end
 
     def previous_page
-      new_page = current_page - 1
-      if new_page >= 1
-        set_page(new_page)
-      end
+      return nil unless current_page
+      return nil if first_page
+      current_page - 1
+    end
+
+    def go_next_page
+      set_page(next_page) if next_page
+    end
+
+    def go_previous_page
+      set_page(previous_page) if previous_page
     end
 
     def set_page(page_number)
+      return unless left_click?
+      prevent_default
       page_number = page_number.to_i
       if attrs.respond_to?(:page=)
         attrs.page = page_number
       else
         params._page = page_number
       end
+    end
+
+    def left_click?
+      `event.which` == 1
+    end
+
+    def prevent_default
+      `event.preventDefault();`
+      `event.stopPropagation();`
     end
   end
 end
