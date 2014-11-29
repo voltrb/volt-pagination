@@ -92,6 +92,15 @@ module Pagination
       end
     end
 
+    def page_attribute
+      attrs.page_last_method
+    end
+
+    def url_for_page(page_number)
+      # url_for(page: page_number)
+      "----1"
+    end
+
     def set_page(page_number)
       page_number = page_number.to_i
       if attrs.respond_to?(:page=)

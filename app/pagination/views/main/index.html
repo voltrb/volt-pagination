@@ -1,4 +1,6 @@
 <:Body>
+<p>--{{ url_for_page(0) }}--</p>
+
   <ul class="pagination">
     <li class="{{ if first_page }}disabled{{ end }}">
       <a e-click="previous_page">&laquo;</a>
@@ -8,7 +10,7 @@
         <li><a>...</a></li>
       {{ else }}
         <li class="{{ if current_page == page_number }}active{{ end }}">
-          <a e-click="set_page(page_number)">{{ page_number }}</a>
+          <a href="{{ url_for_page(0) }}">{{ page_number }}</a>
         </li>
       {{ end }}
     {{ end }}
