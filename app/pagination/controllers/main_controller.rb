@@ -63,7 +63,7 @@ module Pagination
     end
 
     def current_page
-      (attrs.page || params._page).or(1).to_i
+      params.send(:"_#{page_param_name}").or(1).to_i
     end
 
     def total_pages
@@ -78,36 +78,35 @@ module Pagination
       current_page == 1
     end
 
-    def next_page
+    def next_page_url
       new_page = current_page + 1
       if new_page <= total_pages
-        set_page(new_page)
+        return ''
       end
+
+      return url_for_page(new_page)
     end
 
-    def previous_page
+    def previous_page_url
       new_page = current_page - 1
       if new_page >= 1
-        set_page(new_page)
+        return ''
       end
+
+      return url_for_page(new_page)
     end
 
-    def page_attribute
-      attrs.page_last_method
+    def page_param_name
+      attrs.page_param_name || :page
     end
 
     def url_for_page(page_number)
-      # url_for(page: page_number)
-      "----1"
+      url_with({page_param_name => page_number})
     end
 
     def set_page(page_number)
       page_number = page_number.to_i
-      if attrs.respond_to?(:page=)
-        attrs.page = page_number
-      else
-        params._page = page_number
-      end
+      params.send(:"_#{page_param_name}=", page_number)
     end
   end
 end

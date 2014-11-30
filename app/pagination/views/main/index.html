@@ -1,16 +1,14 @@
 <:Body>
-<p>--{{ url_for_page(0) }}--</p>
-
   <ul class="pagination">
     <li class="{{ if first_page }}disabled{{ end }}">
-      <a e-click="previous_page">&laquo;</a>
+      <a href="url_for_page(previous_page_number)">&laquo;</a>
     </li>
     {{ page_numbers.each do |page_number| }}
       {{ if page_number.nil? }}
         <li><a>...</a></li>
       {{ else }}
         <li class="{{ if current_page == page_number }}active{{ end }}">
-          <a href="{{ url_for_page(0) }}">{{ page_number }}</a>
+          <a href="{{ url_for_page(page_number) }}">{{ page_number }}</a>
         </li>
       {{ end }}
     {{ end }}
