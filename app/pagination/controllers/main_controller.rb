@@ -80,7 +80,7 @@ module Pagination
 
     def next_page_url
       new_page = current_page + 1
-      if new_page <= total_pages
+      if new_page > total_pages
         return ''
       end
 
@@ -89,7 +89,7 @@ module Pagination
 
     def previous_page_url
       new_page = current_page - 1
-      if new_page >= 1
+      if new_page < 1
         return ''
       end
 

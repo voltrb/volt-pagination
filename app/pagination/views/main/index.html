@@ -1,7 +1,7 @@
 <:Body>
   <ul class="pagination">
     <li class="{{ if first_page }}disabled{{ end }}">
-      <a href="url_for_page(previous_page_number)">&laquo;</a>
+      <a href="{{ previous_page_url }}">&laquo;</a>
     </li>
     {{ page_numbers.each do |page_number| }}
       {{ if page_number.nil? }}
@@ -13,6 +13,6 @@
       {{ end }}
     {{ end }}
     <li class="{{ if last_page }}disabled{{ end }}">
-      <a e-click="next_page">&raquo;</a>
+      <a href="{{ next_page_url }}">&raquo;</a>
     </li>
   </ul>
