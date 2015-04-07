@@ -51,19 +51,19 @@ module Pagination
     end
 
     def window
-      attrs.window.or(5).to_i
+      (attrs.window || 5).to_i
     end
 
     def outer_window
-      attrs.outer_window.or(1).to_i
+      (attrs.outer_window || 1).to_i
     end
 
     def per_page
-      attrs.per_page.or(10).to_i
+      (attrs.per_page || 10).to_i
     end
 
     def current_page
-      params.send(:"_#{page_param_name}").or(1).to_i
+      (params.send(:"_#{page_param_name}") || 1).to_i
     end
 
     def total_pages
