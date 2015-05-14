@@ -1,6 +1,6 @@
 require "volt/pagination/version"
 
-class Volt
+module Volt
   class Pagination
     # Your code goes here...
   end
