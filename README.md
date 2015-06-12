@@ -20,7 +20,7 @@ To page a collection or query, simply use ```.skip``` and ```.limit```
 Assuming a page size of 10:
 
     def items_on_page
-      store._items.find({active: true}).skip((params._page || 1).to_i - 1) * 10).limit(10)
+      store._items.where({active: true}).skip((params._page || 1).to_i - 1) * 10).limit(10).all
     end
 
 Then in your view you can add:

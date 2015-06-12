@@ -1,13 +1,12 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-
-version = File.read(File.expand_path('../VERSION', __FILE__)).strip
+require 'volt/pagination/version'
 
 
 Gem::Specification.new do |spec|
   spec.name          = "volt-pagination"
-  spec.version       = version
+  spec.version       = Volt::Pagination::VERSION
   spec.authors       = ["Ryan Stout"]
   spec.email         = ["ryanstout@gmail.com"]
   spec.summary       = %q{A Volt component that provides a :pagination tag}

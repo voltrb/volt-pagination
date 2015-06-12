@@ -23,31 +23,33 @@ module Pagination
     end
 
     def page_numbers
-      total = total_pages()
-      cpage = current_page()
+      total_pages.then do |total|
 
-      start_pos, end_pos = middle_window(cpage, total)
-      middle_window = (start_pos..end_pos).to_a
+        cpage = current_page()
 
-      if outer_window == 0
-        pages = middle_window
-      else
-        side_size = ((outer_window - 1) / 2).ceil
+        start_pos, end_pos = middle_window(cpage, total)
+        middle_window = (start_pos..end_pos).to_a
 
-        start_outer_pos = [1 + side_size, start_pos-1].min
-        end_outer_pos = [total - side_size, end_pos + 1].max
+        if outer_window == 0
+          pages = middle_window
+        else
+          side_size = ((outer_window - 1) / 2).ceil
 
-        start_window = (1..start_outer_pos).to_a
-        end_window = (end_outer_pos..total).to_a
+          start_outer_pos = [1 + side_size, start_pos-1].min
+          end_outer_pos = [total - side_size, end_pos + 1].max
 
-        pages = start_window
-        pages << nil unless start_outer_pos == (middle_window[0] - 1)
-        pages += middle_window
-        pages << nil unless end_outer_pos == middle_window[-1] + 1
-        pages += end_window
+          start_window = (1..start_outer_pos).to_a
+          end_window = (end_outer_pos..total).to_a
+
+          pages = start_window
+          pages << nil unless start_outer_pos == (middle_window[0] - 1)
+          pages += middle_window
+          pages << nil unless end_outer_pos == middle_window[-1] + 1
+          pages += end_window
+        end
+
+        pages
       end
-
-      return pages
     end
 
     def window
@@ -66,8 +68,11 @@ module Pagination
       (params.send(:"_#{page_param_name}") || 1).to_i
     end
 
+    # Assumes a promise and returns a promise
     def total_pages
-      (attrs.total.to_i / per_page.to_f).ceil
+      attrs.total.then do |total|
+        (total.to_i / per_page.to_f).ceil
+      end
     end
 
     def last_page
@@ -79,12 +84,14 @@ module Pagination
     end
 
     def next_page_url
-      new_page = current_page + 1
-      if new_page > total_pages
-        return ''
-      end
+      total_pages.then do |total_pages|
+        new_page = current_page + 1
+        if new_page > total_pages
+          next ''
+        end
 
-      return url_for_page(new_page)
+        url_for_page(new_page)
+      end
     end
 
     def previous_page_url
