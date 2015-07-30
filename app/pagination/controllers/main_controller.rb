@@ -22,13 +22,21 @@ module Pagination
       return start_pos, end_pos
     end
 
-    def page_numbers
+    def page_numbers i=nil
       total_pages.then do |total|
 
         cpage = current_page()
 
-        start_pos, end_pos = middle_window(cpage, total)
-        middle_window = (start_pos..end_pos).to_a
+        if i == 0
+          start_pos, end_pos = middle_window(cpage-2, total)
+          middle_window = (start_pos..end_pos).to_a
+        elsif i == 1
+          start_pos, end_pos = middle_window(cpage+2, total)
+          middle_window = (start_pos..end_pos).to_a
+        else
+          start_pos, end_pos = middle_window(cpage, total)
+          middle_window = (start_pos..end_pos).to_a
+        end
 
         if outer_window == 0
           pages = middle_window
@@ -44,11 +52,16 @@ module Pagination
           pages = start_window
           pages << nil unless start_outer_pos == (middle_window[0] - 1)
           pages += middle_window
-          pages << nil unless end_outer_pos == middle_window[-1] + 1
+          pages << 0 unless end_outer_pos == middle_window[-1] + 1
           pages += end_window
         end
+        page._pages = pages
+      end
+    end
 
-        pages
+    def expand_pages x
+      page_numbers(x).then do |pages|
+        page._pages = pages
       end
     end
 

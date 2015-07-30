@@ -2,9 +2,11 @@
   <li class="{{ if first_page }}disabled{{ end }}">
     <a href="{{ previous_page_url }}">&laquo;</a>
   </li>
-  {{ page_numbers.each do |page_number| }}
-    {{ if page_number.nil? }}
-      <li><a>...</a></li>
+  {{ page._pages.each do |page_number| }}
+    {{ if page_number.nil? }}<!-- first ... -->
+      <li><a e-click="expand_pages(0)">...</a></li>
+    {{ elsif page_number == 0 }}<!-- last ... -->
+      <li><a e-click="expand_pages(1)">...</a></li>
     {{ else }}
       <li class="{{ if current_page == page_number }}active{{ end }}">
         <a href="{{ url_for_page(page_number) }}">{{ page_number }}</a>
