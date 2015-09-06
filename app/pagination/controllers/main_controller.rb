@@ -96,32 +96,28 @@ module Pagination
       current_page == 1
     end
 
-    def next_page_url
+    def goto_next_page
       total_pages.then do |total_pages|
         new_page = current_page + 1
         if new_page > total_pages
           next ''
         end
 
-        url_for_page(new_page)
+        params.send(:"_#{page_param_name}=", new_page)
       end
     end
 
-    def previous_page_url
+    def goto_previous_page
       new_page = current_page - 1
       if new_page < 1
         return ''
       end
 
-      return url_for_page(new_page)
+      params.send(:"_#{page_param_name}=", new_page)
     end
 
     def page_param_name
       attrs.page_param_name || :page
-    end
-
-    def url_for_page(page_number)
-      url_with({page_param_name => page_number})
     end
 
     def set_page(page_number)
