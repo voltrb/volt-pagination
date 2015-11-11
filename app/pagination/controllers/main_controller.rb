@@ -76,7 +76,9 @@ module Pagination
     end
 
     def last_page
-      current_page == page_numbers.last
+      page_numbers.last.then do |last|
+        current_page == last
+      end
     end
 
     def first_page
