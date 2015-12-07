@@ -1,40 +1,16 @@
 module Pagination
   class MainController < Volt::ModelController
 
-    def middle_window(cpage, total)
-      side_size = ((window - 1) / 2).ceil
-
-      start_pos = cpage - side_size
-      end_pos = cpage + side_size
-
-      if start_pos <= 0
-        end_pos += (0 - start_pos) + 1
-        start_pos = 1
-      end
-
-      if end_pos > total
-        start_pos = [start_pos - (end_pos - total), 1].max
-        end_pos = total
-      end
-
-      end_pos = [end_pos, 1].max
-
-      return start_pos, end_pos
-    end
-
-    def page_numbers i=nil
+    def page_numbers(i=nil)
       total_pages.then do |total|
-
-        cpage = current_page()
-
         if i == 0
-          start_pos, end_pos = middle_window(cpage-2, total)
+          start_pos, end_pos = middle_window(page._pages[2] - 3, total)
           middle_window = (start_pos..end_pos).to_a
         elsif i == 1
-          start_pos, end_pos = middle_window(cpage+2, total)
+          start_pos, end_pos = middle_window(page._pages[2] + window + 2, total)
           middle_window = (start_pos..end_pos).to_a
         else
-          start_pos, end_pos = middle_window(cpage, total)
+          start_pos, end_pos = middle_window(current_page, total)
           middle_window = (start_pos..end_pos).to_a
         end
 
@@ -73,6 +49,27 @@ module Pagination
       (attrs.outer_window || 1).to_i
     end
 
+    def middle_window cpage, total
+      side_size = ((window - 1) / 2).ceil
+
+      start_pos = cpage - side_size
+      end_pos = cpage + side_size
+
+      if start_pos <= 0
+        end_pos += (0 - start_pos) + 1
+        start_pos = 1
+      end
+
+      if end_pos > total
+        start_pos = [start_pos - (end_pos - total), 1].max
+        end_pos = total
+      end
+
+      end_pos = [end_pos, 1].max
+
+      [start_pos, end_pos]
+    end
+
     def per_page
       (attrs.per_page || 10).to_i
     end
@@ -97,32 +94,27 @@ module Pagination
     end
 
     def goto_next_page
-      total_pages.then do |total_pages|
-        new_page = current_page + 1
-        if new_page > total_pages
-          next ''
-        end
-
-        params.send(:"_#{page_param_name}=", new_page)
+      Promise.when(current_page, total_pages).then do |current_page, total_pages|
+        page = [(current_page + 1), total_pages].min
+        set_page(page)
       end
     end
 
     def goto_previous_page
-      new_page = current_page - 1
-      if new_page < 1
-        return ''
+      current_page.then do |current_page|
+        page = [(current_page - 1), 1].max
+        set_page(page)
       end
-
-      params.send(:"_#{page_param_name}=", new_page)
     end
 
     def page_param_name
       attrs.page_param_name || :page
     end
 
-    def set_page(page_number)
-      page_number = page_number.to_i
-      params.send(:"_#{page_param_name}=", page_number)
+    def set_page page_number
+      page_number.then do
+        params.send(:"_#{page_param_name}=", page_number.to_i)
+      end
     end
   end
 end
