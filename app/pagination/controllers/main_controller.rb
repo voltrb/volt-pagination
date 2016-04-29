@@ -4,10 +4,10 @@ module Pagination
     def page_numbers(i=nil)
       total_pages.then do |total|
         if i == 0
-          start_pos, end_pos = middle_window(page._pages[2] - 3, total)
+          start_pos, end_pos = middle_window(controller._pages[2] - 3, total)
           middle_window = (start_pos..end_pos).to_a
         elsif i == 1
-          start_pos, end_pos = middle_window(page._pages[2] + window + 2, total)
+          start_pos, end_pos = middle_window(controller._pages[2] + window + 2, total)
           middle_window = (start_pos..end_pos).to_a
         else
           start_pos, end_pos = middle_window(current_page, total)
@@ -31,14 +31,18 @@ module Pagination
           pages << 0 unless end_outer_pos == middle_window[-1] + 1
           pages += end_window
         end
-        page._pages = pages
+        controller._pages = pages
       end
     end
 
     def expand_pages x
       page_numbers(x).then do |pages|
-        page._pages = pages
+        controller._pages = pages
       end
+    end
+
+    def certain_page
+      controller._pages
     end
 
     def window
