@@ -2,7 +2,7 @@
   <li class="{{ if first_page }}disabled{{ end }}">
     <a e-click="goto_previous_page">&laquo;</a>
   </li>
-  {{ page._pages.each do |page_number| }}
+  {{ certain_page.each do |page_number| }}
     {{ if page_number.nil? }}<!-- first ... -->
       <li><a e-click="expand_pages(0)">...</a></li>
     {{ elsif page_number == 0 }}<!-- last ... -->
