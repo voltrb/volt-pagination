@@ -1,17 +1,19 @@
 <ul class="pagination">
   <li class="{{ if first_page }}disabled{{ end }}">
-    <a href="{{ previous_page_url }}">&laquo;</a>
+    <a e-click="goto_previous_page">&laquo;</a>
   </li>
-  {{ page_numbers.each do |page_number| }}
-    {{ if page_number.nil? }}
-      <li><a>...</a></li>
+  {{ certain_page.each do |page_number| }}
+    {{ if page_number.nil? }}<!-- first ... -->
+      <li><a e-click="expand_pages(0)">...</a></li>
+    {{ elsif page_number == 0 }}<!-- last ... -->
+      <li><a e-click="expand_pages(1)">...</a></li>
     {{ else }}
       <li class="{{ if current_page == page_number }}active{{ end }}">
-        <a href="{{ url_for_page(page_number) }}">{{ page_number }}</a>
+        <a e-click="set_page(page_number)">{{ page_number }}</a>
       </li>
     {{ end }}
   {{ end }}
   <li class="{{ if last_page }}disabled{{ end }}">
-    <a href="{{ next_page_url }}">&raquo;</a>
+    <a e-click="goto_next_page">&raquo;</a>
   </li>
 </ul>
